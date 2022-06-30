@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const { chats } = require('./data/data');
 
@@ -8,6 +9,21 @@ const { chats } = require('./data/data');
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
+
+// Connect mongoDB database
+mongoose.connect(
+  `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@sandbox.53gsr.mongodb.net/Clubhouse?retryWrites=true&w=majority`,
+  { useUnifiedTopology: true }
+);
+
+// Check if connected to database:
+const db = mongoose.connection;
+db.once('open', () => {
+  console.log('Connected to Database');
+});
+db.on('error', (err) => {
+  console.error('connection error:', err);
+});
 
 const app = express();
 
