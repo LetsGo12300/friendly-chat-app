@@ -7,6 +7,10 @@ const jwt = require('jsonwebtoken');
 // For input validation
 const { body, validationResult } = require('express-validator');
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+};
+
 exports.signup_post = [
   body('confirmPassword').custom((value, { req }) => {
     if (value !== req.body.password) {
@@ -18,9 +22,7 @@ exports.signup_post = [
     // Check if there are errors in the form
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      console.log('User failed to sign up!');
-      // Redirect to home
-      return res.redirect('/');
+      return res.status(400).json({ message: 'Passwords do not match!' });
     }
     // If there are no errors, proceed to save new user to database
     try {
@@ -32,8 +34,21 @@ exports.signup_post = [
             username: req.body.username,
             password: hashedPassword,
             name: req.body.name,
-            //   displayPhoto: req.body.displayPhoto,
-          }).save((err) => (err ? next(err) : res.redirect('/')));
+            displayPhoto: req.body.displayPhoto,
+          }).save((err, user) => {
+            if (err) {
+              return res
+                .status(400)
+                .json({ message: 'Username already exists' });
+            } else {
+              return res.status(201).json({
+                _id: user._id,
+                name: user.name,
+                username: user.username,
+                token: generateToken(user._id),
+              });
+            }
+          });
         }
       });
     } catch (err) {

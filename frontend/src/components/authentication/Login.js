@@ -8,41 +8,51 @@ import {
   InputRightElement,
   Button,
 } from '@chakra-ui/react';
+import axios from 'axios';
 
 const Login = () => {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   // For showing password
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
   // For submit button
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    const data = {
+      username,
+      password,
+    };
+    const config = { headers: { 'Content-type': 'application/json' } };
+    const user = await axios.post('/login', data, config);
+  };
 
   return (
     <VStack spacing={3}>
       <FormControl isRequired>
         <FormLabel htmlFor='username'>Username</FormLabel>
         <Input
+          value={username}
           focusBorderColor='pink.500'
           id='username'
           placeholder='Enter your username'
           size='md'
-          onchange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
         />
       </FormControl>
       <FormControl isRequired>
         <FormLabel htmlFor='password'>Password</FormLabel>
         <InputGroup size='md'>
           <Input
+            value={password}
             pr='4.5rem'
             type={show ? 'text' : 'password'}
             id='password'
             placeholder='Enter your password'
             size='md'
             focusBorderColor='pink.500'
-            onchange={(e) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement width='4.5rem'>
             <Button
@@ -62,7 +72,7 @@ const Login = () => {
         colorScheme='pink'
         mt='20px'
         style={{ marginTop: 20 }}
-        onclick={handleSubmit}
+        onClick={handleSubmit}
       >
         Log In
       </Button>
