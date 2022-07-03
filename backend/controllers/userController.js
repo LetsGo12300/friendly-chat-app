@@ -58,6 +58,12 @@ exports.signup_post = [
 ];
 
 exports.login_post = passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/',
+  successRedirect: '/api/chats',
+  failureRedirect: '/login-error',
 });
+
+exports.login_get_error = (req, res) => {
+  return res.status(401).json({
+    message: 'User failed to login. The username or password is incorrect.',
+  });
+};

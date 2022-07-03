@@ -7,12 +7,20 @@ import {
   InputGroup,
   InputRightElement,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 
 const Login = () => {
+  // For user input values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  // For button loading animation
+  const [loading, setLoading] = useState(false);
+
+  // Chakra UI toast
+  const toast = useToast();
 
   // For showing password
   const [show, setShow] = useState(false);
@@ -20,12 +28,32 @@ const Login = () => {
 
   // For submit button
   const handleSubmit = async () => {
-    const data = {
-      username,
-      password,
-    };
-    const config = { headers: { 'Content-type': 'application/json' } };
-    const user = await axios.post('/login', data, config);
+    setLoading(true);
+    try {
+      const data = {
+        username,
+        password,
+      };
+      const config = { headers: { 'Content-type': 'application/json' } };
+      const user = await axios.post('/login', data, config);
+      toast({
+        title: 'User logged in successfully!',
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+      setLoading(false);
+    } catch (err) {
+      toast({
+        title: err.response.data.message,
+        status: 'error',
+        duration: 4000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,6 +101,7 @@ const Login = () => {
         mt='20px'
         style={{ marginTop: 20 }}
         onClick={handleSubmit}
+        isLoading={loading}
       >
         Log In
       </Button>
