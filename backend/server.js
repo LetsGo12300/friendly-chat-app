@@ -12,8 +12,9 @@ const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 // Import routes
-const userRouter = require('./routes/userRoutes');
-const apiRouter = require('./routes/apiRoutes');
+const authRouter = require('./routes/authRoutes');
+const apiUserRouter = require('./routes/apiUserRoutes');
+const apiChatRouter = require('./routes/apiChatRoutes');
 
 // Import model
 const Users = require('./models/Users');
@@ -96,7 +97,7 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     },
     function (jwt_payload, done) {
-      Users.findOne({ id: jwt_payload.id }, function (err, user) {
+      Users.findOne({ _id: jwt_payload.id }, function (err, user) {
         if (err) {
           return done(err, false);
         }
@@ -117,9 +118,18 @@ app.use((req, res, next) => {
 });
 
 // Use routes
-app.use('/', userRouter);
+app.use('/', authRouter);
 // secure route (must verify JWT token first)
-app.use('/api', passport.authenticate('jwt', { session: false }), apiRouter);
+app.use(
+  '/api/user',
+  passport.authenticate('jwt', { session: false }),
+  apiUserRouter
+);
+app.use(
+  '/api/chat',
+  passport.authenticate('jwt', { session: false }),
+  apiChatRouter
+);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
