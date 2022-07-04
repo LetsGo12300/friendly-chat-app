@@ -41,12 +41,9 @@ exports.signup_post = [
                 .status(400)
                 .json({ message: 'Username already exists' });
             } else {
-              return res.status(201).json({
-                _id: user._id,
-                name: user.name,
-                username: user.username,
-                token: generateToken(user._id),
-              });
+              return res
+                .status(201)
+                .json({ message: 'Registration successful' });
             }
           });
         }
@@ -57,10 +54,28 @@ exports.signup_post = [
   },
 ];
 
-exports.login_post = passport.authenticate('local', {
-  successRedirect: '/api/chats',
-  failureRedirect: '/login-error',
-});
+exports.login_post = (req, res, next) => {
+  passport.authenticate('local', function (err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.redirect('/login-error');
+    }
+
+    req.logIn(user, { session: false }, function (err) {
+      if (err) {
+        return next(err);
+      }
+      return res.json({
+        _id: req.user._id,
+        name: req.user.name,
+        username: req.user.username,
+        token: 'Bearer ' + generateToken(req.user._id),
+      });
+    });
+  })(req, res, next);
+};
 
 exports.login_get_error = (req, res) => {
   return res.status(401).json({

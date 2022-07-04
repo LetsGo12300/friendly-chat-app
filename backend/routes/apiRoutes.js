@@ -3,8 +3,10 @@ const router = express.Router();
 
 const { chats } = require('../data/data');
 
-router.get('/chats', (req, res) => {
-  res.json(chats);
+router.get('/chats', (req, res, next) => {
+  res.json({
+    message: 'You made it to the secure route',
+  });
 });
 
 router.get('/chat/:id', (req, res) => {

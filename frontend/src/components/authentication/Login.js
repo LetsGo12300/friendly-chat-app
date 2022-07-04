@@ -30,12 +30,14 @@ const Login = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const data = {
+      const user = {
         username,
         password,
       };
       const config = { headers: { 'Content-type': 'application/json' } };
-      const user = await axios.post('/login', data, config);
+      const { data } = await axios.post('/login', user, config);
+      // Store user information
+      localStorage.setItem('userData', JSON.stringify(data));
       toast({
         title: 'User logged in successfully!',
         status: 'success',

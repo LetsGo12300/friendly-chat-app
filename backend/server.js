@@ -7,6 +7,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
+const JWTstrategy = require('passport-jwt').Strategy;
+const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 // Import routes
 const userRouter = require('./routes/userRoutes');
@@ -41,7 +44,6 @@ const app = express();
 app.use(
   session({
     secret: `${process.env.SESSION_SECRET}`,
-    cookie: { maxAge: 3600000 },
     resave: false,
     saveUninitialized: true,
   })
@@ -49,13 +51,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.use(express.json()); // to accept json data
 app.use(cors());
-
-// Use routes
-app.use('/', userRouter);
-app.use('/api', apiRouter);
 
 // For passport local strategy
 passport.use(
@@ -90,11 +89,37 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+passport.use(
+  new JWTstrategy(
+    {
+      secretOrKey: process.env.JWT_SECRET,
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    },
+    function (jwt_payload, done) {
+      Users.findOne({ id: jwt_payload.id }, function (err, user) {
+        if (err) {
+          return done(err, false);
+        }
+        if (user) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      });
+    }
+  )
+);
+
 // Access the user object from anywhere
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+
+// Use routes
+app.use('/', userRouter);
+// secure route (must verify JWT token first)
+app.use('/api', passport.authenticate('jwt', { session: false }), apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
