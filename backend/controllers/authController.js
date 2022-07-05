@@ -70,6 +70,7 @@ exports.login_post = (req, res, next) => {
       }
       return res.json({
         _id: req.user._id,
+        displayPhoto: req.user.displayPhoto,
         name: req.user.name,
         username: req.user.username,
         token: 'Bearer ' + generateToken(req.user._id),

@@ -11,6 +11,8 @@ exports.users_get = async (req, res) => {
       }
     : {};
   // Search for all users except for the logged in user
-  const users = await Users.find(keyword).find({ _id: { $ne: req.user._id } });
+  const users = await Users.find(keyword)
+    .find({ _id: { $ne: req.user._id } })
+    .select('-password');
   res.json(users);
 };

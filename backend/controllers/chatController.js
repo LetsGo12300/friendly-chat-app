@@ -39,7 +39,7 @@ exports.chat_post = async (req, res) => {
       // If no chat found between the 2 users, create a new chat
       const newChat = await Chats.create(chatData);
       const Chat = await Chats.findOne({ _id: newChat._id }).populate(
-        'users',
+        'members',
         '-password'
       );
       res.status(200).json(Chat);

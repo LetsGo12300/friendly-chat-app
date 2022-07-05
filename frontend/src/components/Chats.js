@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { ChatState } from '../context/ChatProvider';
+import { Flex, Spacer } from '@chakra-ui/react';
+import MainHeader from './chat page/MainHeader';
+import UserChats from './chat page/UserChats';
+import ChatBox from './chat page/ChatBox';
 
 const Chats = () => {
-  const [chats, setChats] = useState([]);
-
-  const getChats = async () => {
-    const { data } = await axios.get('/api/chat');
-    setChats(data);
-  };
-
-  useEffect(() => {
-    getChats();
-  }, []);
-
+  const { user } = ChatState();
   return (
-    <>
-      {chats.map((chat) => {
-        return <div key={chat._id}>{chat.chatName}</div>;
-      })}
-    </>
+    <div style={{ width: '100%' }}>
+      {user && <MainHeader />}
+      <Flex p='1rem'>
+        {user && <UserChats />}
+        <Spacer />
+        {user && <ChatBox />}
+      </Flex>
+    </div>
   );
 };
 

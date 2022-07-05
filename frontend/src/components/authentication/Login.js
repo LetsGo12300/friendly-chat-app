@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   VStack,
   FormControl,
@@ -12,6 +13,9 @@ import {
 import axios from 'axios';
 
 const Login = () => {
+  // use react navigate hook
+  const navigate = useNavigate();
+
   // For user input values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -46,6 +50,7 @@ const Login = () => {
         position: 'bottom-right',
       });
       setLoading(false);
+      navigate('/chats');
     } catch (err) {
       toast({
         title: err.response.data.message,

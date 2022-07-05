@@ -74,7 +74,7 @@ const Signup = () => {
         displayPhoto,
       };
       const config = { headers: { 'Content-type': 'application/json' } };
-      const user = await axios.post('/signup', data, config);
+      await axios.post('/signup', data, config);
       toast({
         title: 'User signed up successfully!',
         status: 'success',
