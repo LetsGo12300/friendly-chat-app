@@ -24,9 +24,9 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { ChatState } from '../../context/ChatProvider';
-import SearchLoading from './miscellaneous/SearchLoading';
+import SearchLoading from './miscellaneous/user components/SearchLoading';
 import UserModal from './miscellaneous/main header/UserModal';
-import UserResult from './miscellaneous/main header/UserResult';
+import UserResult from './miscellaneous/user components/UserResult';
 import axios from 'axios';
 
 const MainHeader = () => {
@@ -70,7 +70,7 @@ const MainHeader = () => {
   };
 
   // API request to start a chat with clicked/selected user
-  const handleUserClick = async (userID) => {
+  const handleUserClick = async (clickedUser) => {
     try {
       setLoadingChat(true);
       const config = {
@@ -80,7 +80,11 @@ const MainHeader = () => {
         },
       };
 
-      const { data } = await axios.post('/api/chat/', { userID }, config);
+      const { data } = await axios.post(
+        '/api/chat/',
+        { userID: clickedUser._id },
+        config
+      );
 
       // if there is no existing chat yet, append to the chats state
       if (!chats.find((chat) => chat._id === data._id)) {

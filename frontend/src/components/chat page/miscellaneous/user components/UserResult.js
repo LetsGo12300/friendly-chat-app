@@ -14,7 +14,7 @@ const UserResult = ({ user, handleUserClick }) => {
       _hover={{
         background: 'gray.300',
       }}
-      onClick={() => handleUserClick(user._id)}
+      onClick={() => handleUserClick(user)}
     >
       <Avatar name={user.name} src={user.displayPhoto} />
       <Box>

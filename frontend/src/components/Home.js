@@ -36,9 +36,7 @@ const Home = () => {
         borderRadius='lg'
         borderWidth='1px'
       >
-        <Text className='home-title' fontSize='2xl'>
-          Friendly Chat
-        </Text>
+        <Text fontSize='2xl'>Friendly Chat</Text>
       </Box>
       <Box
         bg='blue.800'

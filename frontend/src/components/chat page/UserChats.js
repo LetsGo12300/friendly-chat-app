@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useToast, Box, Button, Stack, Text, Flex } from '@chakra-ui/react';
 import { ChatState } from '../../context/ChatProvider';
-import SearchLoading from './miscellaneous/SearchLoading';
+import SearchLoading from './miscellaneous/user components/SearchLoading';
 import { getSender } from '../../config/ChatsController';
+import GroupChatModal from './miscellaneous/user chats/GroupChatModal';
 import axios from 'axios';
 
 const UserChats = () => {
@@ -61,13 +62,15 @@ const UserChats = () => {
         w='100%'
       >
         <Text>My Chats</Text>
-        <Button d='flex' fontSize={{ base: '17px', md: '10px', lg: '17px' }}>
-          <i
-            style={{ marginRight: '8px' }}
-            className='fa-solid fa-circle-plus'
-          ></i>
-          New Group Chat
-        </Button>
+        <GroupChatModal user={user}>
+          <Button d='flex' fontSize={{ base: '17px', md: '10px', lg: '17px' }}>
+            <i
+              style={{ marginRight: '8px' }}
+              className='fa-solid fa-circle-plus'
+            ></i>
+            New Group Chat
+          </Button>
+        </GroupChatModal>
       </Flex>
 
       <Box>
