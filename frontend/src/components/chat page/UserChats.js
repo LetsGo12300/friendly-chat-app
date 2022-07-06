@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useToast, Box, Button, Stack, Text, Flex } from '@chakra-ui/react';
 import { ChatState } from '../../context/ChatProvider';
 import SearchLoading from './miscellaneous/user components/SearchLoading';
-import { getSender } from '../../config/ChatsController';
+import { getSenderName } from '../../config/ChatsController';
 import GroupChatModal from './miscellaneous/user chats/GroupChatModal';
 import axios from 'axios';
 
-const UserChats = () => {
+const UserChats = ({ fetchChats }) => {
   const [loggedUser, setLoggedUser] = useState([]);
   const { user, chats, setChats, selectedChat, setSelectedChat } = ChatState();
 
@@ -18,7 +18,7 @@ const UserChats = () => {
     try {
       const config = {
         headers: {
-          Authorization: `${user.token}`,
+          Authorization: user.token,
         },
       };
       const { data } = await axios.get('/api/chat', config);
@@ -38,19 +38,17 @@ const UserChats = () => {
     setLoggedUser(JSON.parse(localStorage.getItem('userData')));
     getChats();
     // eslint-disable-next-line
-  }, []);
+  }, [fetchChats]);
 
   return (
     <Box
-      d={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
+      display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
       flexDirection='column'
-      justifyContent='space-between'
-      alignItems='center'
       p={3}
       bg='white'
-      w={{ base: '100%', md: '31%' }}
+      w={{ base: '100%', md: '33%' }}
       borderRadius='lg'
-      borderWidth='1px'
+      borderWidth={6}
       height='100%'
     >
       <Flex
@@ -61,9 +59,13 @@ const UserChats = () => {
         fontSize={{ base: '28px', md: '30px' }}
         w='100%'
       >
-        <Text>My Chats</Text>
+        <Text fontSize={{ base: '1.2rem', md: '1.5rem' }}>My Chats</Text>
         <GroupChatModal user={user}>
-          <Button d='flex' fontSize={{ base: '17px', md: '10px', lg: '17px' }}>
+          <Button
+            d='flex'
+            size='sm'
+            fontSize={{ base: '17px', md: '10px', lg: '17px' }}
+          >
             <i
               style={{ marginRight: '8px' }}
               className='fa-solid fa-circle-plus'
@@ -73,7 +75,7 @@ const UserChats = () => {
         </GroupChatModal>
       </Flex>
 
-      <Box>
+      <Box w='100%'>
         {chats ? (
           <Stack overflowY='scroll'>
             {chats.map((chat) => {
@@ -83,6 +85,9 @@ const UserChats = () => {
                   cursor='pointer'
                   bg={selectedChat === chat ? '#38B2AC' : '#E8E8E8'}
                   color={selectedChat === chat ? 'white' : 'black'}
+                  _hover={{
+                    background: 'gray.300',
+                  }}
                   px={3}
                   py={2}
                   borderRadius='lg'
@@ -90,7 +95,7 @@ const UserChats = () => {
                 >
                   <Text>
                     {!chat.isGroupChat
-                      ? getSender(loggedUser, chat.members)
+                      ? getSenderName(loggedUser, chat.members)
                       : chat.chatName}
                   </Text>
                   {chat.latestMessage && (

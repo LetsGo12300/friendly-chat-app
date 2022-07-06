@@ -167,7 +167,7 @@ exports.removeUser_put = async (req, res) => {
   } else {
     res.status(403).json({
       message:
-        "You don't have the rights to remove this user to the group. Contact the admin.",
+        "You don't have the rights to remove this user from the group. Contact the admin.",
     });
   }
 };

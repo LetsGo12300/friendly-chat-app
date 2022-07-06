@@ -57,7 +57,7 @@ const MainHeader = () => {
         setLoading(true);
         const config = {
           headers: {
-            Authorization: `${user.token}`,
+            Authorization: user.token,
           },
         };
         const { data } = await axios.get(`/api/user?search=${search}`, config);
@@ -75,7 +75,7 @@ const MainHeader = () => {
       setLoadingChat(true);
       const config = {
         headers: {
-          Authorization: `${user.token}`,
+          Authorization: user.token,
           'Content-type': 'application/json',
         },
       };

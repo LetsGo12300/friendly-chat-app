@@ -6,7 +6,7 @@ import Chats from './components/Chats';
 
 const App = () => {
   return (
-    <div>
+    <div id='app'>
       <Routes>
         <Route path='/' element={<Home />}></Route>
         <Route path='/chats' element={<Chats />}></Route>

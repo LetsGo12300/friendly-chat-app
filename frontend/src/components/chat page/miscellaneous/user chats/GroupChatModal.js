@@ -5,7 +5,6 @@ import UserBadge from '../user components/UserBadge';
 import {
   useToast,
   useDisclosure,
-  Text,
   Flex,
   Modal,
   ModalOverlay,
@@ -18,7 +17,6 @@ import {
   FormControl,
   Input,
   Spinner,
-  Box,
 } from '@chakra-ui/react';
 import axios from 'axios';
 
@@ -31,7 +29,7 @@ const GroupChatModal = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
 
-  const { user, chats, setChats } = ChatState();
+  const { user, chats, setChats, setSelectedChat } = ChatState();
 
   // for chakra UI toast
   const toast = useToast();
@@ -105,11 +103,12 @@ const GroupChatModal = ({ children }) => {
       };
       const config = {
         headers: {
-          Authorization: `${user.token}`,
+          Authorization: user.token,
         },
       };
       const { data } = await axios.post('/api/chat/creategroup', body, config);
       setChats([data, ...chats]);
+      setSelectedChat(data);
       setLoadingButton(false);
       onClose();
     } catch {

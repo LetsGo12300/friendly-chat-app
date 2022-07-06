@@ -26,7 +26,7 @@ const Home = () => {
   }, [navigate]);
 
   return (
-    <Container maxW='2xl' centerContent>
+    <Container maxW='2xl' h='100%' centerContent>
       <Box
         bg='blue.800'
         color='white'
