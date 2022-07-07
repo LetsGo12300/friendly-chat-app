@@ -10,7 +10,7 @@ const MessagesSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Users',
   },
-  chatName: {
+  chatID: {
     type: Schema.Types.ObjectId,
     ref: 'Chats',
   },

@@ -19,12 +19,12 @@ exports.chat_post = async (req, res) => {
     ],
     isGroupChat: false,
   }).populate('members', '-password');
-  //     .populate('latestMessage');
+  // .populate('latestMessage');
 
-  //   isChat = await Users.populate(isChat, {
-  //     path: 'latestMessage.sender',
-  //     select: 'name displayPhoto',
-  //   });
+  // await Users.populate(isChat, {
+  //   path: 'lastMessage.sender',
+  //   select: 'name username displayPhoto',
+  // });
 
   if (isChat.length > 0) {
     res.json(isChat[0]);
@@ -58,13 +58,14 @@ exports.chats_get = async (req, res) => {
     Chats.find({ members: { $elemMatch: { $eq: req.user._id } } })
       .populate('members', '-password')
       .populate('admin', '-password')
+      .populate('lastMessage')
       .sort({ updatedAt: -1 })
-      .then((chats) => {
-        // results = await Users.populate(results, {
-        //   path: 'latestMessage.sender',
-        //   select: 'name pic email',
-        // });
-        res.status(200).json(chats);
+      .then(async (result) => {
+        await Users.populate(result, {
+          path: 'lastMessage.sender',
+          select: 'name username displayPhoto',
+        });
+        res.status(200).json(result);
       });
   } catch (error) {
     res.status(400);

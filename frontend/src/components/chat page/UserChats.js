@@ -50,6 +50,7 @@ const UserChats = ({ fetchChats }) => {
       borderRadius='lg'
       borderWidth={6}
       height='100%'
+      overflow='auto'
     >
       <Flex
         alignItems='center'

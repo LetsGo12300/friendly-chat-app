@@ -11,8 +11,8 @@ const Chats = () => {
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      {user && <MainHeader />}
-      <Flex h='100%' p={1}>
+      {user && <MainHeader height='10vh' />}
+      <Flex height='90vh' p={1}>
         {user && <UserChats fetchChats={fetchChats} />}
         {user && (
           <ChatBox fetchChats={fetchChats} setFetchChats={setFetchChats} />

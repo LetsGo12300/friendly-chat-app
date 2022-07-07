@@ -20,6 +20,10 @@ const ChatsSchema = new Schema({
       ref: 'Users',
     },
   ],
+  lastMessage: {
+    type: Schema.Types.ObjectId,
+    ref: 'Messages',
+  },
   timestamp: {
     type: Date,
     default: Date.now,

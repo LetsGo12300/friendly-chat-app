@@ -15,6 +15,7 @@ const ExtractJWT = require('passport-jwt').ExtractJwt;
 const authRouter = require('./routes/authRoutes');
 const apiUserRouter = require('./routes/apiUserRoutes');
 const apiChatRouter = require('./routes/apiChatRoutes');
+const apiMessageRouter = require('./routes/apiMessageRoutes');
 
 // Import model
 const Users = require('./models/Users');
@@ -129,6 +130,11 @@ app.use(
   '/api/chat',
   passport.authenticate('jwt', { session: false }),
   apiChatRouter
+);
+app.use(
+  '/api/message',
+  passport.authenticate('jwt', { session: false }),
+  apiMessageRouter
 );
 
 // catch 404 and forward to error handler
