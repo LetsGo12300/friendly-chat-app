@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { ChatState } from '../../context/ChatProvider';
 import { Box, Avatar, Flex, Tooltip, Text } from '@chakra-ui/react';
 import { ifUser, ifLastMessage, ifSameSender } from '../../config/ChatLogics';
 
 const ScrollableChat = ({ messages }) => {
   const { user, selectedChat } = ChatState();
+  const bottomRef = useRef(null);
+
+  useEffect(() => {
+    // scroll to bottomRef every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
     <div className='messages'>
@@ -48,6 +54,7 @@ const ScrollableChat = ({ messages }) => {
           </Flex>
         );
       })}
+      <span ref={bottomRef}></span>
     </div>
   );
 };
