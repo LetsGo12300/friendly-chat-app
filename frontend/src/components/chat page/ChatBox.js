@@ -45,7 +45,6 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       );
       setLoading(false);
       setMessages(data);
-      console.log(data);
     } catch {
       toast({
         title: 'Failed to retrieve chats',
@@ -117,9 +116,12 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       p={3}
       bg='white'
       w='100%'
-      borderRadius='lg'
-      borderWidth={6}
       height='100%'
+      borderTopWidth={3}
+      borderBottomWidth={6}
+      borderLeftWidth={{ base: selectedChat ? 6 : 3, md: 3 }}
+      borderRightWidth={6}
+      borderColor='gray.300'
     >
       {selectedChat ? (
         <Flex flexDirection='column' height='100%' w='100%'>
@@ -202,6 +204,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
               />
             </FormControl>
             <Button
+              h='90%'
               colorScheme='teal'
               variant='solid'
               size='sm'
@@ -217,7 +220,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
           flexDirection='column'
           justifyContent='center'
           alignItems='center'
-          height='100%'
+          h='100%'
           w='100%'
         >
           <Text fontSize='2xl' color='gray.500'>

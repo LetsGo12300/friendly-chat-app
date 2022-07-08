@@ -111,9 +111,14 @@ const MainHeader = () => {
       alignItems='center'
       bg='white'
       w='100%'
+      h='100%'
       px={3}
       py={2}
-      borderWidth={6}
+      borderTopWidth={6}
+      borderBottomWidth={3}
+      borderLeftWidth={6}
+      borderRightWidth={6}
+      borderColor='gray.300'
     >
       <Tooltip
         label='Click here to search a user to chat with'

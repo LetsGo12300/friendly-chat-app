@@ -46,11 +46,13 @@ const UserChats = ({ fetchChats }) => {
       flexDirection='column'
       p={3}
       bg='white'
-      w={{ base: '100%', md: '33%' }}
-      borderRadius='lg'
-      borderWidth={6}
       height='100%'
       overflow='auto'
+      borderTopWidth={3}
+      borderBottomWidth={6}
+      borderLeftWidth={6}
+      borderRightWidth={{ base: selectedChat ? 6 : 3, md: 3 }}
+      borderColor='gray.300'
     >
       <Flex
         alignItems='center'
