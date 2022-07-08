@@ -16,7 +16,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -26,4 +26,17 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.overflow {
+  overflow-y: scroll;
+}
+
+.align-true {
+  justify-content: flex-end;
+  margin-left: 35%;
+}
+
+.align-false {
+  margin-right: 35%;
 }

@@ -25,7 +25,7 @@ import {
 } from '@chakra-ui/react';
 import { ChatState } from '../../context/ChatProvider';
 import SearchLoading from './miscellaneous/user components/SearchLoading';
-import UserModal from './miscellaneous/main header/UserModal';
+import UserModal from './miscellaneous/user components/UserModal';
 import UserResult from './miscellaneous/user components/UserResult';
 import axios from 'axios';
 

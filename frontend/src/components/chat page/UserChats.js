@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useToast, Box, Button, Stack, Text, Flex } from '@chakra-ui/react';
 import { ChatState } from '../../context/ChatProvider';
 import SearchLoading from './miscellaneous/user components/SearchLoading';
-import { getSenderName } from '../../config/ChatsController';
+import { getSenderName } from '../../config/ChatLogics';
 import GroupChatModal from './miscellaneous/user chats/GroupChatModal';
 import axios from 'axios';
 
