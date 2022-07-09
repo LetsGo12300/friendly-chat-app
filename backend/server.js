@@ -167,9 +167,9 @@ const io = require('socket.io')(server, {
 io.on('connection', (socket) => {
   console.log('Connected to socket.io');
 
-  socket.on('setup', (userData) => {
-    socket.join(userData);
-    console.log(userData);
+  socket.on('setup', (userID) => {
+    socket.join(userID);
+    console.log(userID);
     socket.emit('connected');
   });
 
@@ -190,9 +190,7 @@ io.on('connection', (socket) => {
         return;
       }
 
-      socket
-        .in(newMessageReceived.chatID._id)
-        .emit('message received', newMessageReceived);
+      socket.in(member._id).emit('message received', newMessageReceived);
     });
   });
 

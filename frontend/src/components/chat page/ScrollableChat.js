@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { ChatState } from '../../context/ChatProvider';
 import { Box, Avatar, Flex, Tooltip, Text } from '@chakra-ui/react';
 import { ifUser, ifLastMessage, ifSameSender } from '../../config/ChatLogics';
@@ -6,7 +6,7 @@ import Lottie from 'react-lottie';
 import TypingAnimation from '../../animations/chat-typing-indicator.json';
 
 const ScrollableChat = ({ messages, isTyping }) => {
-  const { user, selectedChat } = ChatState();
+  const { user } = ChatState();
   const bottomRef = useRef(null);
 
   const defaultOptions = {
@@ -21,7 +21,7 @@ const ScrollableChat = ({ messages, isTyping }) => {
   useEffect(() => {
     // scroll to bottomRef every time messages change
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   return (
     <div className='messages'>
@@ -57,6 +57,7 @@ const ScrollableChat = ({ messages, isTyping }) => {
                 borderRadius='xl'
                 style={{
                   boxShadow: 'rgba(0, 0, 0, 0.05) 0px 1px 2px 0px',
+                  wordBreak: 'break-word',
                 }}
               >
                 {msg.message}

@@ -21,7 +21,13 @@ const ENDPOINT = 'http://localhost:5000';
 let socket, selectedChatCompare;
 
 const ChatBox = ({ fetchChats, setFetchChats }) => {
-  const { user, selectedChat } = ChatState();
+  const {
+    user,
+    selectedChat,
+    setSelectedChat,
+    notifications,
+    setNotifications,
+  } = ChatState();
 
   const [loading, setLoading] = useState(false);
   const [loadingSendButton, setloadingSendButton] = useState(false);
@@ -64,7 +70,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
+    socket.emit('setup', JSON.parse(localStorage.getItem('userData'))._id);
     socket.on('connected', () => {
       setSocketConnected(true);
     });
@@ -80,7 +86,6 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
   // call getChats whenever the user selects a chat
   useEffect(() => {
     getChats();
-
     selectedChatCompare = selectedChat;
     // eslint-disable-next-line
   }, [selectedChat]);
@@ -91,7 +96,11 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
         !selectedChatCompare ||
         selectedChatCompare._id !== newMessageReceived.chatID._id
       ) {
-        // send notification
+        if (!notifications.includes(newMessageReceived)) {
+          setNotifications([newMessageReceived, ...notifications]);
+          setFetchChats(!fetchChats);
+          console.log(notifications);
+        }
       } else {
         setMessages([...messages, newMessageReceived]);
       }
@@ -195,7 +204,10 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
         <Flex flexDirection='column' height='100%' w='100%'>
           {selectedChat.isGroupChat ? (
             <Flex justifyContent='space-between' alignItems='center' mb={2}>
-              <Button display={{ base: 'block', md: 'none' }}>
+              <Button
+                display={{ base: 'block', md: 'none' }}
+                onClick={() => setSelectedChat('')}
+              >
                 <i className='fa-solid fa-arrow-left'></i>
               </Button>
               <Box>
@@ -214,7 +226,10 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
             </Flex>
           ) : (
             <Flex justifyContent='space-between' alignItems='center' mb={2}>
-              <Button display={{ base: 'block', md: 'none' }}>
+              <Button
+                display={{ base: 'block', md: 'none' }}
+                onClick={() => setSelectedChat('')}
+              >
                 <i className='fa-solid fa-arrow-left'></i>
               </Button>
               <Box>

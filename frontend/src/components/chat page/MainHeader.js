@@ -34,7 +34,14 @@ const MainHeader = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-  const { user, chats, setChats, setSelectedChat } = ChatState();
+  const {
+    user,
+    chats,
+    setChats,
+    setSelectedChat,
+    notifications,
+    setNotifications,
+  } = ChatState();
 
   // Chakra UI toast
   const toast = useToast();
@@ -148,12 +155,47 @@ const MainHeader = () => {
       <Box>
         <Menu>
           <MenuButton mr={3}>
-            <i className='fa-solid fa-bell fa-lg'></i>
+            {notifications.length ? (
+              <span style={{ color: '#ED64A6' }}>
+                <i
+                  className='fa-solid fa-bell fa-lg fa-beat'
+                  style={{ '--fa-animation-duration': '1.5s' }}
+                ></i>
+              </span>
+            ) : (
+              <span>
+                <i className='fa-solid fa-bell fa-lg'></i>
+              </span>
+            )}
           </MenuButton>
-          <MenuList>
-            <MenuItem>To Do #1</MenuItem>
-            <MenuItem>To Do #2</MenuItem>
-            <MenuItem>To Do #3</MenuItem>
+          <MenuList w={'120px'}>
+            <MenuGroup title={`Notifications (${notifications.length})`}>
+              {notifications.length ? (
+                notifications.map((notification) => {
+                  return (
+                    <MenuItem
+                      key={notification._id}
+                      onClick={() => {
+                        setSelectedChat(notification.chatID);
+                        setNotifications(
+                          notifications.filter((n) => n !== notification)
+                        );
+                      }}
+                    >
+                      {notification.chatID.isGroupChat ? (
+                        <Text>
+                          New message in {notification.chatID.chatName}
+                        </Text>
+                      ) : (
+                        <Text>New message from {notification.sender.name}</Text>
+                      )}
+                    </MenuItem>
+                  );
+                })
+              ) : (
+                <MenuItem>No new notifications</MenuItem>
+              )}
+            </MenuGroup>
           </MenuList>
         </Menu>
         <Menu>
