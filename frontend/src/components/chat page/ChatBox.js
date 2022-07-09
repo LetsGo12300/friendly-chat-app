@@ -98,8 +98,6 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       ) {
         if (!notifications.includes(newMessageReceived)) {
           setNotifications([newMessageReceived, ...notifications]);
-          setFetchChats(!fetchChats);
-          console.log(notifications);
         }
       } else {
         setMessages([...messages, newMessageReceived]);
@@ -170,6 +168,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       setMessages([...messages, data]);
       // Reset input field
       setMessage('');
+      setFetchChats(!fetchChats);
     } catch (error) {
       toast({
         title: 'Error',
@@ -203,7 +202,12 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       {selectedChat ? (
         <Flex flexDirection='column' height='100%' w='100%'>
           {selectedChat.isGroupChat ? (
-            <Flex justifyContent='space-between' alignItems='center' mb={2}>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              mb={2}
+              gap={2}
+            >
               <Button
                 display={{ base: 'block', md: 'none' }}
                 onClick={() => setSelectedChat('')}
@@ -211,7 +215,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
                 <i className='fa-solid fa-arrow-left'></i>
               </Button>
               <Box>
-                <Text fontSize={{ base: '1em', md: '2xl' }}>
+                <Text textAlign='center' fontSize={{ base: '1em', md: '2xl' }}>
                   {selectedChat.chatName}
                 </Text>
               </Box>
@@ -225,7 +229,12 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
               </UpdateGroupChatModal>
             </Flex>
           ) : (
-            <Flex justifyContent='space-between' alignItems='center' mb={2}>
+            <Flex
+              justifyContent='space-between'
+              alignItems='center'
+              mb={2}
+              gap={2}
+            >
               <Button
                 display={{ base: 'block', md: 'none' }}
                 onClick={() => setSelectedChat('')}
@@ -233,7 +242,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
                 <i className='fa-solid fa-arrow-left'></i>
               </Button>
               <Box>
-                <Text fontSize={{ base: '1em', md: '2xl' }}>
+                <Text textAlign='center' fontSize={{ base: '1em', md: '2xl' }}>
                   {getSenderName(user, selectedChat.members)}
                 </Text>
               </Box>

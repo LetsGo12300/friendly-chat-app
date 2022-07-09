@@ -101,6 +101,18 @@ const UserChats = ({ fetchChats }) => {
                       ? getSenderName(loggedUser, chat.members)
                       : chat.chatName}
                   </Text>
+
+                  {chat.lastMessage ? (
+                    <Text fontSize='sm' color='teal.600'>
+                      <b>{chat.lastMessage.sender.name}: </b>
+                      {chat.lastMessage.message.length > 30
+                        ? chat.lastMessage.message.slice(0, 30) + '...'
+                        : chat.lastMessage.message}
+                    </Text>
+                  ) : (
+                    ''
+                  )}
+
                   {chat.latestMessage && (
                     <Text fontSize='xs'>
                       <b>{chat.latestMessage.sender.name} : </b>
