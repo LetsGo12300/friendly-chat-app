@@ -2,10 +2,21 @@ import React, { useRef, useState, useEffect } from 'react';
 import { ChatState } from '../../context/ChatProvider';
 import { Box, Avatar, Flex, Tooltip, Text } from '@chakra-ui/react';
 import { ifUser, ifLastMessage, ifSameSender } from '../../config/ChatLogics';
+import Lottie from 'react-lottie';
+import TypingAnimation from '../../animations/chat-typing-indicator.json';
 
-const ScrollableChat = ({ messages }) => {
+const ScrollableChat = ({ messages, isTyping }) => {
   const { user, selectedChat } = ChatState();
   const bottomRef = useRef(null);
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: TypingAnimation,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice',
+    },
+  };
 
   useEffect(() => {
     // scroll to bottomRef every time messages change
@@ -54,6 +65,13 @@ const ScrollableChat = ({ messages }) => {
           </Flex>
         );
       })}
+      {isTyping ? (
+        <Box maxW='60px' bg='gray.200' borderRadius='2rem' mt={4}>
+          <Lottie width={40} height={35} options={defaultOptions} />
+        </Box>
+      ) : (
+        <></>
+      )}
       <span ref={bottomRef}></span>
     </div>
   );

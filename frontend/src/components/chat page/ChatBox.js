@@ -15,6 +15,10 @@ import UpdateGroupChatModal from './miscellaneous/user chats/UpdateGroupChatModa
 import { getSenderName, getSender } from '../../config/ChatLogics';
 import ScrollableChat from './ScrollableChat';
 import axios from 'axios';
+import io from 'socket.io-client';
+
+const ENDPOINT = 'http://localhost:5000';
+let socket, selectedChatCompare;
 
 const ChatBox = ({ fetchChats, setFetchChats }) => {
   const { user, selectedChat } = ChatState();
@@ -24,14 +28,14 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
 
-  // call getChats whenever the user selects a chat
-  useEffect(() => {
-    getChats();
-    // eslint-disable-next-line
-  }, [selectedChat]);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   // Get all chats from selectedChat
   const getChats = async () => {
+    if (!selectedChat) return;
+
     setLoading(true);
     try {
       const config = {
@@ -45,6 +49,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       );
       setLoading(false);
       setMessages(data);
+      socket.emit('join chat', selectedChat._id);
     } catch {
       toast({
         title: 'Failed to retrieve chats',
@@ -57,6 +62,66 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
     }
   };
 
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => {
+      setSocketConnected(true);
+    });
+    socket.on('typing', () => {
+      setIsTyping(true);
+    });
+    socket.on('stop typing', () => {
+      setIsTyping(false);
+    });
+    // eslint-disable-next-line
+  }, []);
+
+  // call getChats whenever the user selects a chat
+  useEffect(() => {
+    getChats();
+
+    selectedChatCompare = selectedChat;
+    // eslint-disable-next-line
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on('message received', (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chatID._id
+      ) {
+        // send notification
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    });
+  });
+
+  const handleTyping = (e) => {
+    setMessage(e.target.value);
+
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit('typing', selectedChat._id);
+    }
+
+    // If user stops typing after 2s, remove typing animation
+    let lastTypingTime = new Date().getTime();
+    let timerLength = 2000;
+    setTimeout(() => {
+      let timeNow = new Date().getTime();
+      let timeDifference = timeNow - lastTypingTime;
+
+      if (timeDifference >= timerLength && typing) {
+        socket.emit('stop typing', selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
+  };
+
   // If user presses Enter, proceed to handle send message
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -66,6 +131,8 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
 
   // For send button
   const handleSendMessage = async () => {
+    socket.emit('stop typing', selectedChat._id);
+
     if (!message) {
       return;
     }
@@ -89,6 +156,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
         config
       );
       setloadingSendButton(false);
+      socket.emit('new message', data);
       // Update messages
       setMessages([...messages, data]);
       // Reset input field
@@ -186,11 +254,11 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
               </Flex>
             ) : (
               <Box p={2}>
-                <ScrollableChat messages={messages} />
+                <ScrollableChat messages={messages} isTyping={isTyping} />
               </Box>
             )}
           </Flex>
-          <Flex alignItems='center' p={2} bg='gray.100'>
+          <Flex alignItems='center' pb={2} px={2} bg='gray.100'>
             <FormControl mr={1} isRequired>
               <Input
                 bg='white'
@@ -199,7 +267,7 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
                 focusBorderColor='pink.500'
                 placeholder='Enter message'
                 size='md'
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={handleTyping}
                 onKeyDown={handleKeyDown}
               />
             </FormControl>

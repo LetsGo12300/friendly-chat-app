@@ -146,7 +146,10 @@ exports.removeUser_put = async (req, res) => {
 
   // If user is not the admin, don't proceed to update the group members
   const groupChat = await Chats.findById(chatID);
-  if (groupChat.admin._id.toString() === req.user._id.toString()) {
+  if (
+    groupChat.admin._id.toString() === req.user._id.toString() ||
+    userID === req.user._id.toString()
+  ) {
     const updatedChat = await Chats.findByIdAndUpdate(
       chatID,
       {
@@ -173,7 +176,7 @@ exports.removeUser_put = async (req, res) => {
   }
 };
 
-// @desc    Add user to Group / Leave
+// @desc    Add user to Group
 // @route   PUT /api/chat/groupadd
 // @access  Protected
 exports.addUser_put = async (req, res) => {
