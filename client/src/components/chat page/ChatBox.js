@@ -17,7 +17,7 @@ import ScrollableChat from './ScrollableChat';
 import axios from 'axios';
 import io from 'socket.io-client';
 
-const ENDPOINT = 'http://localhost:5000';
+const ENDPOINT = 'https://friendlychat-app.herokuapp.com';
 let socket, selectedChatCompare;
 
 const ChatBox = ({ fetchChats, setFetchChats }) => {

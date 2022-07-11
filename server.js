@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
+const path = require('path');
 
 // Import routes
 const authRouter = require('./routes/authRoutes');
@@ -57,6 +58,7 @@ app.use(cookieParser());
 
 app.use(express.json()); // to accept json data
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 // For passport local strategy
 passport.use(
@@ -151,6 +153,10 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.json({ message: err.message });
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 const server = app.listen(PORT, () =>
