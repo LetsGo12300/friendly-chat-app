@@ -183,108 +183,114 @@ const UpdateGroupChatModal = ({ children, fetchChats, setFetchChats }) => {
   };
 
   return (
-    <>
-      <span onClick={onOpen}>{children}</span>
+    user && (
+      <>
+        <span onClick={onOpen}>{children}</span>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {showEditName ? (
-              <Flex width='92%'>
-                <FormControl isRequired mb={2}>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              {showEditName ? (
+                <Flex width='92%'>
+                  <FormControl isRequired mb={2}>
+                    <Input
+                      value={groupChatName}
+                      focusBorderColor='pink.500'
+                      placeholder='Enter group chat name'
+                      size='md'
+                      onChange={(e) => setGroupChatName(e.target.value)}
+                    />
+                  </FormControl>
+                  <Button
+                    ml={1}
+                    colorScheme='gray'
+                    onClick={toggleEditGroupName}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    ml={1}
+                    colorScheme='green'
+                    onClick={handleRenameGroupChat}
+                    isLoading={loadingButton}
+                  >
+                    Save
+                  </Button>
+                </Flex>
+              ) : (
+                <Flex width='92%' alignItems='center' justifyContent='start'>
+                  <Text fontSize='xl'>{selectedChat.chatName}</Text>
+                  <Button
+                    ml={1}
+                    variant='ghost'
+                    color='pink.500'
+                    onClick={toggleEditGroupName}
+                  >
+                    <i className='fa-solid fa-pen-to-square'></i>
+                  </Button>
+                </Flex>
+              )}
+            </ModalHeader>
+            <ModalCloseButton />
+
+            <ModalBody>
+              <Flex mb={2} justifyContent='center' flexWrap='wrap'>
+                {selectedChat.members
+                  .filter((member) => member._id !== user._id)
+                  .map((member) => {
+                    return (
+                      <UserBadge
+                        key={member._id}
+                        user={member}
+                        handleUserClick={handleRemoveUserClick}
+                      />
+                    );
+                  })}
+              </Flex>
+
+              <Box mb={2}>
+                <FormControl isRequired>
                   <Input
-                    value={groupChatName}
+                    value={search}
                     focusBorderColor='pink.500'
-                    placeholder='Enter group chat name'
+                    placeholder='Add members e.g., John, Jacob, Marie'
                     size='md'
-                    onChange={(e) => setGroupChatName(e.target.value)}
+                    onChange={(e) => handleSearch(e.target.value)}
                   />
                 </FormControl>
-                <Button ml={1} colorScheme='gray' onClick={toggleEditGroupName}>
-                  Cancel
-                </Button>
-                <Button
-                  ml={1}
-                  colorScheme='green'
-                  onClick={handleRenameGroupChat}
-                  isLoading={loadingButton}
-                >
-                  Save
-                </Button>
-              </Flex>
-            ) : (
-              <Flex width='92%' alignItems='center' justifyContent='start'>
-                <Text fontSize='xl'>{selectedChat.chatName}</Text>
-                <Button
-                  ml={1}
-                  variant='ghost'
-                  color='pink.500'
-                  onClick={toggleEditGroupName}
-                >
-                  <i className='fa-solid fa-pen-to-square'></i>
-                </Button>
-              </Flex>
-            )}
-          </ModalHeader>
-          <ModalCloseButton />
+              </Box>
 
-          <ModalBody>
-            <Flex mb={2} justifyContent='center' flexWrap='wrap'>
-              {selectedChat.members
-                .filter((member) => member._id !== user._id)
-                .map((member) => {
+              {loading ? (
+                <Flex justifyContent='center' mt={3}>
+                  <Spinner color='teal' />
+                </Flex>
+              ) : (
+                searchedUsers?.slice(0, 4).map((searchedUser) => {
                   return (
-                    <UserBadge
-                      key={member._id}
-                      user={member}
-                      handleUserClick={handleRemoveUserClick}
+                    <UserResult
+                      key={searchedUser._id}
+                      user={searchedUser}
+                      handleUserClick={handleAddUserClick}
                     />
                   );
-                })}
-            </Flex>
+                })
+              )}
+            </ModalBody>
 
-            <Box mb={2}>
-              <FormControl isRequired>
-                <Input
-                  value={search}
-                  focusBorderColor='pink.500'
-                  placeholder='Add members e.g., John, Jacob, Marie'
-                  size='md'
-                  onChange={(e) => handleSearch(e.target.value)}
-                />
-              </FormControl>
-            </Box>
-
-            {loading ? (
-              <Flex justifyContent='center' mt={3}>
-                <Spinner color='teal' />
-              </Flex>
-            ) : (
-              searchedUsers?.slice(0, 4).map((searchedUser) => {
-                return (
-                  <UserResult
-                    key={searchedUser._id}
-                    user={searchedUser}
-                    handleUserClick={handleAddUserClick}
-                  />
-                );
-              })
-            )}
-          </ModalBody>
-
-          <ModalFooter>
-            <Button
-              size='sm'
-              colorScheme='red'
-              onClick={() => handleRemoveUserClick(user)}
-            >
-              Leave Group
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+            <ModalFooter>
+              <Button
+                size='sm'
+                colorScheme='red'
+                onClick={() => handleRemoveUserClick(user)}
+              >
+                Leave Group
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </>
+    )
   );
 };
 

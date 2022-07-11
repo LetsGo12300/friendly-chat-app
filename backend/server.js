@@ -165,17 +165,24 @@ const io = require('socket.io')(server, {
 });
 
 io.on('connection', (socket) => {
+  let currentChat;
+
   console.log('Connected to socket.io');
 
   socket.on('setup', (userID) => {
     socket.join(userID);
-    console.log(userID);
     socket.emit('connected');
   });
 
   socket.on('join chat', (room) => {
-    socket.join(room);
-    console.log('User joined room ' + room);
+    // Leave all current chat rooms
+    Array.from(socket.rooms)
+      .filter((chatRoom) => chatRoom.includes('CHAT_'))
+      .forEach((chatRoom) => {
+        socket.leave(chatRoom);
+      });
+    // Join new chat room
+    socket.join('CHAT_' + room);
   });
 
   socket.on('new message', (newMessageReceived) => {
@@ -195,11 +202,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('typing', (room) => {
-    socket.in(room).emit('typing');
+    socket.in('CHAT_' + room).emit('typing');
   });
 
   socket.on('stop typing', (room) => {
-    socket.in(room).emit('stop typing');
+    socket.in('CHAT_' + room).emit('stop typing');
   });
 
   socket.off('setup', () => {

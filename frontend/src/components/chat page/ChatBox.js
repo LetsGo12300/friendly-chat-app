@@ -83,9 +83,12 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
     // eslint-disable-next-line
   }, []);
 
-  // call getChats whenever the user selects a chat
   useEffect(() => {
+    // call getChats whenever the user selects a chat
     getChats();
+    // clear message input field
+    setMessage('');
+
     selectedChatCompare = selectedChat;
     // eslint-disable-next-line
   }, [selectedChat]);
@@ -168,7 +171,6 @@ const ChatBox = ({ fetchChats, setFetchChats }) => {
       setMessages([...messages, data]);
       // Reset input field
       setMessage('');
-      setFetchChats(!fetchChats);
     } catch (error) {
       toast({
         title: 'Error',
