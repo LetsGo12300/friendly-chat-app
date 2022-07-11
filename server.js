@@ -139,6 +139,10 @@ app.use(
   apiMessageRouter
 );
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -155,10 +159,6 @@ app.use(function (err, req, res, next) {
   res.json({ message: err.message });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-});
-
 const server = app.listen(PORT, () =>
   console.log(`App listening on port http://localhost:${PORT}`)
 );
@@ -166,7 +166,7 @@ const server = app.listen(PORT, () =>
 const io = require('socket.io')(server, {
   pingTimeout: 60000, // wait 60s
   cors: {
-    origin: 'http://localhost:3000',
+    origin: ['https://friendlychat-app.herokuapp.com'],
   },
 });
 
