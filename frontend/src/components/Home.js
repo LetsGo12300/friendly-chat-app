@@ -17,13 +17,16 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = 'Log In';
     const user = JSON.parse(localStorage.getItem('userData'));
 
     if (user) {
       navigate('/chats');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    document.title = 'Friendly Chat - Log In or Sign Up';
+  }, []);
 
   return (
     <Container maxW='2xl' h='100%' centerContent>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChatState } from '../context/ChatProvider';
 import { Grid, GridItem } from '@chakra-ui/react';
 import MainHeader from './chat page/MainHeader';
@@ -8,6 +8,10 @@ import ChatBox from './chat page/ChatBox';
 const Chats = () => {
   const { user, selectedChat } = ChatState();
   const [fetchChats, setFetchChats] = useState(false);
+
+  useEffect(() => {
+    document.title = 'Friendly Chat - Chats';
+  }, []);
 
   return (
     <div style={{ width: '100%', height: '100%' }}>

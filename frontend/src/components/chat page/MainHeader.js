@@ -148,7 +148,11 @@ const MainHeader = () => {
         </Button>
       </Tooltip>
 
-      <Text fontSize={{ base: '1em', md: '2xl' }} color='gray.700'>
+      <Text
+        className='other-font'
+        fontSize={{ base: '1.2em', md: '3xl' }}
+        color='gray.700'
+      >
         FRIENDLY CHAT
       </Text>
 

@@ -32,6 +32,7 @@ const UpdateGroupChatModal = ({ children, fetchChats, setFetchChats }) => {
   const [searchedUsers, setSearchedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [loadingAdd, setLoadingAdd] = useState(false);
   const [showEditName, setShowEditName] = useState(false);
 
   // Reset states when the modal closes/opens
@@ -157,6 +158,7 @@ const UpdateGroupChatModal = ({ children, fetchChats, setFetchChats }) => {
       return;
     }
 
+    setLoadingAdd(true);
     try {
       const config = {
         headers: {
@@ -170,6 +172,7 @@ const UpdateGroupChatModal = ({ children, fetchChats, setFetchChats }) => {
       );
       setSelectedChat(data);
       setFetchChats(!fetchChats);
+      setLoadingAdd(false);
     } catch (error) {
       toast({
         title: 'Failed to add the user',
@@ -179,6 +182,7 @@ const UpdateGroupChatModal = ({ children, fetchChats, setFetchChats }) => {
         isClosable: true,
         position: 'bottom-right',
       });
+      setLoadingAdd(false);
     }
   };
 
@@ -261,7 +265,7 @@ const UpdateGroupChatModal = ({ children, fetchChats, setFetchChats }) => {
                 </FormControl>
               </Box>
 
-              {loading ? (
+              {loading || loadingAdd ? (
                 <Flex justifyContent='center' mt={3}>
                   <Spinner color='teal' />
                 </Flex>
