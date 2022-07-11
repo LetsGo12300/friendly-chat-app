@@ -165,8 +165,6 @@ const io = require('socket.io')(server, {
 });
 
 io.on('connection', (socket) => {
-  let currentChat;
-
   console.log('Connected to socket.io');
 
   socket.on('setup', (userID) => {
