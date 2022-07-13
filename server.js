@@ -114,12 +114,6 @@ passport.use(
   )
 );
 
-// Access the user object from anywhere
-app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
-  next();
-});
-
 // Use routes
 app.use('/', authRouter);
 // secure route (must verify JWT token first)
