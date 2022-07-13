@@ -34,15 +34,27 @@ Friendly Chat is a simple web-based chat application with Express, Node, React, 
 
 [Check out the live demo on Heroku](https://friendlychat-app.herokuapp.com/)
 
+### Log in and sign up page
+
 <img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657683940/readme/Screenshot_20220713-105842__01_kabjuk.jpg"  width="360"  height="auto" alt="Log in and sign up page" />
+
+### User Profile
 
 <img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657683940/readme/Screenshot_20220713-105910__01_rr725q.jpg"  width="360"  height="auto" alt="Profile" />
 
+### Search chat
+
 <img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657683940/readme/Screenshot_20220713-105934__01_otxxjo.jpg"  width="360"  height="auto" alt="Search chat" />
+
+### Creating a group chat
+
+<img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657683940/readme/Screenshot_20220713-110316__01_kvddno.jpg"  width="360"  height="auto" alt="Creating a group chat" />
+
+### Chat demo
 
 <img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657692603/readme/22-07-13-11-12-15-demo_ehmvpd.gif"  width="360"  height="auto" alt="Chat demo" />
 
-<img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657683940/readme/Screenshot_20220713-110316__01_kvddno.jpg"  width="360"  height="auto" alt="Create group chat" />
+### Showing notifications
 
 <img  src="https://res.cloudinary.com/dm5pq9l7b/image/upload/v1657692602/readme/22-07-13-11-09-09-demo_lmdugc.gif"  width="360"  height="auto" alt="Showing notifications" />
 

@@ -4,7 +4,8 @@ const Users = require('../models/Users');
 const Chats = require('../models/Chats');
 
 // method: GET
-// /api/message/:chatID
+// route: /api/message/:chatID
+// description: Get all messages from the chat
 exports.msg_get = async (req, res) => {
   const chatID = req.params.chatID;
   try {
@@ -19,7 +20,8 @@ exports.msg_get = async (req, res) => {
 };
 
 // method: POST
-// /api/message/
+// route: /api/message/
+// description: Send a message to the chat
 exports.msg_post = async (req, res) => {
   const { message, chatID } = req.body;
   const messageData = {

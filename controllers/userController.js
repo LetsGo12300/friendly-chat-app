@@ -1,6 +1,9 @@
 // Import model
 const Users = require('../models/Users');
 
+// method: GET
+// route: /api/user?search={}
+// description: Search a user from the query
 exports.users_get = async (req, res) => {
   const keyword = req.query.search
     ? {

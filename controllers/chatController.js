@@ -2,8 +2,9 @@
 const Users = require('../models/Users');
 const Chats = require('../models/Chats');
 
-//@description     Create or fetch One to One Chat, request body must be "userID"
-//@route           POST /api/chat/
+// method: POST
+// route: /api/chat/
+// description: Create or fetch One to One Chat
 exports.chat_post = async (req, res) => {
   const { userID } = req.body;
 
@@ -19,12 +20,6 @@ exports.chat_post = async (req, res) => {
     ],
     isGroupChat: false,
   }).populate('members', '-password');
-  // .populate('latestMessage');
-
-  // await Users.populate(isChat, {
-  //   path: 'lastMessage.sender',
-  //   select: 'name username displayPhoto',
-  // });
 
   if (isChat.length > 0) {
     res.json(isChat[0]);
@@ -50,9 +45,9 @@ exports.chat_post = async (req, res) => {
   }
 };
 
-//@description     Fetch all chats for a user
-//@route           GET /api/chat/
-//@access          Protected
+// method: GET
+// route: /api/chat/
+// description: Fetch all chats for a user
 exports.chats_get = async (req, res) => {
   try {
     Chats.find({ members: { $elemMatch: { $eq: req.user._id } } })
@@ -73,9 +68,9 @@ exports.chats_get = async (req, res) => {
   }
 };
 
-//@description     Create New Group Chat
-//@route           POST /api/chat/group
-//@access          Protected
+// method: POST
+// route: /api/chat/creategroup
+// description: Create a new group chat
 exports.createGroupChat_post = async (req, res) => {
   if (!req.body.members || !req.body.chatName) {
     return res.status(400).send({ message: 'Please fill all the fields' });
@@ -112,9 +107,9 @@ exports.createGroupChat_post = async (req, res) => {
   }
 };
 
-// @desc    Rename Group
-// @route   PUT /api/chat/rename
-// @access  Protected
+// method: PUT
+// route: /api/chat/rename
+// description: Rename a group chat
 exports.renameGroupChat_put = async (req, res) => {
   const { chatID, chatName } = req.body;
 
@@ -138,13 +133,14 @@ exports.renameGroupChat_put = async (req, res) => {
   }
 };
 
-// @desc    Remove user from Group
-// @route   PUT /api/chat/groupremove
-// @access  Protected
+// method: PUT
+// route: /api/chat/removeuser
+// description: Rename a user from a group chat (for group chat admin only)
 exports.removeUser_put = async (req, res) => {
   const { userID, chatID } = req.body;
 
   // If user is not the admin, don't proceed to update the group members
+  // If a logged in user wants to leave the group but is not an admin, proceed to remove user
   const groupChat = await Chats.findById(chatID);
   if (
     groupChat.admin._id.toString() === req.user._id.toString() ||
@@ -176,9 +172,9 @@ exports.removeUser_put = async (req, res) => {
   }
 };
 
-// @desc    Add user to Group
-// @route   PUT /api/chat/groupadd
-// @access  Protected
+// method: PUT
+// route: /api/chat/adduser
+// description: Add a user to a group chat (for group chat admin only)
 exports.addUser_put = async (req, res) => {
   const { userID, chatID } = req.body;
 
